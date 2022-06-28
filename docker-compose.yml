@@ -1,0 +1,56 @@
+version: "3.7"
+volumes:
+  mysql_data:
+    driver: local
+services:
+  mysqldb:
+    image: mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: mpp
+      MYSQL_ROOT_PASSWORD: password
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    cap_add:
+      - SYS_NICE
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:18.0.0
+    restart: on-failure
+    command:
+      - start-dev
+    ports:
+      - "8085:8085"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_IMPORT: /realm-export.json
+    healthcheck:
+      test: [ "cmd", "curl", "-f", "http://keycloak:8080" ]
+      timeout: 20s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "8081:3000"
+    depends_on:
+      - mysqldb
+    command: sh -c "/wait && /sayhello"
+    environment:
+      - WAIT_HOSTS=mysqldb:3306
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
