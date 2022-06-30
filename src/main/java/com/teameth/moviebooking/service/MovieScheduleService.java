@@ -1,8 +1,6 @@
 package com.teameth.moviebooking.service;
 
-import com.teameth.moviebooking.domain.Cinema;
-import com.teameth.moviebooking.domain.Movie;
-import com.teameth.moviebooking.domain.MovieSchedule;
+import com.teameth.moviebooking.domain.*;
 import com.teameth.moviebooking.repository.MovieScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +29,23 @@ public class MovieScheduleService {
         return movieScheduleRepository.findByDate(scheduleDate);
     }
 
+    public List<MovieSchedule> getMovieScheduleByHall(Integer id) {
+        return movieScheduleRepository.findByCinemaHallListHallId(id);
+    }
     public void saveMovieSchedule(MovieSchedule movieSchedule) {
 
         movieScheduleRepository.save(movieSchedule);
     }
+
+    public Movie getMovieById(Integer id){
+        return  movieScheduleRepository.findByMovieMovieid(id);
+    }
+
+   /* public CinemaHall getListofHallSeats(Integer scheduleId) {
+        return movieScheduleRepository.findByCinemaHallListHallId(scheduleId);
+    }*/
+
+    /*public void getScheduleByMovieId(Integer movieId) {
+        movieScheduleRepository.findByMovieSchedule(movieId);
+    }*/
 }

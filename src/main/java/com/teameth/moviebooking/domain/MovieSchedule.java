@@ -1,11 +1,14 @@
 package com.teameth.moviebooking.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teameth.moviebooking.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "movieschedule")
@@ -13,7 +16,7 @@ public class MovieSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  int  movie_schedule_id;
+    private  int  movieScheduleId;
     private Time start_time;
     private Time end_time;
     private Date date;
@@ -21,13 +24,31 @@ public class MovieSchedule {
     public MovieSchedule() {
     }
 
+    public CinemaHall getCinemaHallList() {
+        return cinemaHallList;
+    }
+
+    public void setCinemaHallList(CinemaHall cinemaHallList) {
+        this.cinemaHallList = cinemaHallList;
+    }
+
     // private int movieId;
     @ManyToOne(optional=false)
-    @JoinColumn(name="movie_id",referencedColumnName="movieId")
+    @JoinColumn(name="fkmovieId",referencedColumnName="movieId")
     private  Movie movie;
 
-    public MovieSchedule(int movie_schedule_id, Time start_time, Time end_time, Date date) {
-        this.movie_schedule_id = movie_schedule_id;
+//    @ManyToMany
+//    @JoinTable(name = "scheduled_hall", joinColumns = @JoinColumn(name="movieScheduleId"),
+//            inverseJoinColumns = @JoinColumn(name="hall_id"))
+//    private List<CinemaHall> cinemaHallList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "fkhallId", referencedColumnName = "hallId")
+    @JsonManagedReference
+    private CinemaHall cinemaHallList;
+
+
+    public MovieSchedule(int movieScheduleId, Time start_time, Time end_time, Date date) {
+        this.movieScheduleId = movieScheduleId;
         this.start_time = start_time;
         this.end_time = end_time;
         this.date = date;
@@ -35,11 +56,11 @@ public class MovieSchedule {
     }
 
     public int getMovie_schedule_id() {
-        return movie_schedule_id;
+        return movieScheduleId;
     }
 
-    public void setMovie_schedule_id(int movie_schedule_id) {
-        this.movie_schedule_id = movie_schedule_id;
+    public void setMovie_schedule_id(int movieScheduleId) {
+        this.movieScheduleId = movieScheduleId;
     }
 
     public Time getStart_time() {

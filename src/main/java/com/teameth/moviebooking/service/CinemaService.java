@@ -29,4 +29,9 @@ public class CinemaService {
     }
 
 
+    public List<Cinema> getByLocation(Integer id) {
+       return  cinemaRepository.findByLocationId(id);
+    }
+
+
 }

@@ -11,10 +11,18 @@ import java.util.List;
 public class CinemaHallService {
     @Autowired
     CinemaHallRepository cinemaHallRepository;
+
     public List<CinemaHall> getAllCinemaHall() {
         return cinemaHallRepository.findAll();
     }
+    public List<CinemaHall> getCinemaHallByCinema(Integer id) {
+       // return cinemaHallRepository.getCinemaCinemaId(id);
+        return cinemaHallRepository.findByCinemaCinemaId(id);
 
+    }
+    public CinemaHall getCinemaHall(Integer hall_id){
+        return cinemaHallRepository.findById(hall_id).get();
+    }
     public void saveCinemaHall(CinemaHall cinemaHall) {
         cinemaHallRepository.save(cinemaHall);
     }

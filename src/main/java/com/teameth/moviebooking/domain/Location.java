@@ -11,11 +11,11 @@ public class Location {
     private String name;
     private String State;
     private int zipCode;
-
-   // private List<Cinema> cinemas;
-
     public Location() {
     }
+   // private List<Cinema> cinemas;
+
+
 
     public Location(int id, String name, String state, int zipCode) {
         this.id = id;

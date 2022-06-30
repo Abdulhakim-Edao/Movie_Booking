@@ -4,12 +4,16 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
 
 public class MovieRequest {
     private  String movie_schedule_id;
     private String start_time;
     private String end_time;
     private String date;
+
+    public String hallIds;
 
     public Integer getMovie_schedule_id() {
 
@@ -47,6 +51,10 @@ public class MovieRequest {
         Date dateR=Date.valueOf(date);//converting string into sql date
         System.out.println(date);
         return dateR;
+    }
+
+    public String getHallId() {
+        return hallIds;
     }
 
     public void setDate(String date) {

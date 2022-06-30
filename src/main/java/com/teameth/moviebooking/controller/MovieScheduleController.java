@@ -1,31 +1,43 @@
 package com.teameth.moviebooking.controller;
 
 
-import com.teameth.moviebooking.domain.Movie;
-import com.teameth.moviebooking.domain.MovieSchedule;
+import com.teameth.moviebooking.domain.*;
 import com.teameth.moviebooking.models.MovieRequest;
-import com.teameth.moviebooking.service.MovieScheduleService;
-import com.teameth.moviebooking.service.MovieService;
+import com.teameth.moviebooking.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class MovieScheduleController {
     @Autowired
     private MovieScheduleService movieScheduleService;
+
+    @Autowired
+    private CinemaHallService cinemaHallService;
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private HallSeatService hallSeatService;
+
+    @Autowired
+    private ShowSeatService showSeatService;
 
     @RequestMapping("/movieSchedule")
     public List<MovieSchedule> getAllMovieSchedules(){
         return movieScheduleService.getAllMovieSchedule();
     }
 
-    @RequestMapping("/movieSchedule/{moviescheduleId}")
+   @RequestMapping("/movieSchedule/{moviescheduleId}")
     public MovieSchedule getmovieById(@PathVariable Integer movieScheduleId){
         return movieScheduleService.getMovieSchedule(movieScheduleId);
     }
@@ -43,17 +55,60 @@ public class MovieScheduleController {
    @RequestMapping(method = RequestMethod.POST ,value="/movie/{movieId}/movieSchedule")
    public void saveNewMovieSchedule(@RequestBody MovieRequest movieRequest, @PathVariable Integer movieId) throws ParseException {
 
+       System.out.println(movieRequest.hallIds);
+
        Movie movie = movieService.getMovie(movieId);
-       MovieSchedule movieSchedule = new MovieSchedule(movieRequest.getMovie_schedule_id(),
+       MovieSchedule movieSchedule = new MovieSchedule(0,
                movieRequest.getStart_time(),
                movieRequest.getEnd_time(),
                movieRequest.getDate());
 
-
+       movieSchedule.setCinemaHallList(cinemaHallService.getCinemaHall(Integer.valueOf(movieRequest.getHallId())));
        movieSchedule.setMovie(movie);
        movieScheduleService.saveMovieSchedule(movieSchedule);
 
    }
+    @RequestMapping("/movies/{movieId}")
+    public List<MovieSchedule> getScheduleByMovieId(@PathVariable Integer movieId){
+        //movieScheduleService.getScheduleByMovieId(movieId);
+        List<MovieSchedule> movieScheduleList = movieScheduleService.getAllMovieSchedule();
+        List<MovieSchedule> tobeReturned= new ArrayList<>();
+        for(MovieSchedule ms :movieScheduleList){
+            if(ms.getMovie().getmovieid() == movieId &&
+                    ( (ms.getDate().after(Date.valueOf(LocalDate.now()))) ||
+                    (   ms.getDate().toLocalDate().equals(LocalDate.now())
+                    &&  ms.getStart_time().toLocalTime().compareTo(LocalTime.now()) > 0
+                     )
+                    ))
+                tobeReturned.add(ms);
+        }
+        return tobeReturned;
+    }
+    @RequestMapping("/scheduleSeats/{scheduleId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Integer> getHallSeats(@PathVariable Integer scheduleId){
+       List<Integer> listOfSeats = new ArrayList<>();
+      MovieSchedule movieSchedule = movieScheduleService.getMovieSchedule(scheduleId);
+       CinemaHall cinemaHall = movieSchedule.getCinemaHallList();
+       List<HallSeat> hallSeats = hallSeatService.getHallSeatsByHallid(cinemaHall.getHall_id());
+        for(HallSeat hs:hallSeats){
+            listOfSeats.add(hs.getSeatId());
+        }
+       return listOfSeats;
+    }
+
+    @RequestMapping("/scheduleSeats/{scheduleId}/getShowseats")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Integer> getShowSeats(@PathVariable Integer scheduleId){
+        List<Integer> listOfSeats = new ArrayList<>();
+       // MovieSchedule movieSchedule = movieScheduleService.getMovieSchedule(scheduleId);
+        List<ShowSeat> showseats = showSeatService.getListOFShowSeatsByScheduleID(scheduleId);
+
+        for(ShowSeat ss:showseats){
+            listOfSeats.add(ss.getHallSeat().getSeatId());
+        }
+        return listOfSeats;
+    }
 
 
 

@@ -1,9 +1,12 @@
 package com.teameth.moviebooking.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cinemahall")
@@ -11,31 +14,35 @@ public class CinemaHall {
 
     @Id
     @GeneratedValue( strategy= GenerationType.AUTO)
-    private int hall_id;
+    private int hallId;
 
-    private String hall_name;
+    private String hallName;
     private int total_num_of_seat;
     @ManyToOne
-    @JoinColumn(name="cinema_id")//,referencedColumnName="cinema_id"
+    @JoinColumn(name="cinemaId")//,referencedColumnName="cinema_id")
     private Cinema cinema;
+
+    @OneToMany(mappedBy = "cinemaHallList")
+    @JsonBackReference
+    private List<MovieSchedule> movieScheduleList = new ArrayList<>();
 
     public CinemaHall() {
     }
 
     public int getHall_id() {
-        return hall_id;
+        return hallId;
     }
 
-    public void setHall_id(int hall_id) {
-        this.hall_id = hall_id;
+    public void setHall_id(int hallId) {
+        this.hallId = hallId;
     }
 
     public String getHall_name() {
-        return hall_name;
+        return hallName;
     }
 
-    public void setHall_name(String hall_name) {
-        this.hall_name = hall_name;
+    public void setHall_name(String hallName) {
+        this.hallName = hallName;
     }
 
     public int getTotal_num_of_seat() {

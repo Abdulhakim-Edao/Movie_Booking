@@ -1,6 +1,8 @@
 package com.teameth.moviebooking.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.teameth.moviebooking.domain.Cinema;
+import com.teameth.moviebooking.domain.CinemaHall;
 import com.teameth.moviebooking.domain.Location;
 import com.teameth.moviebooking.models.CinemaRequest;
 import com.teameth.moviebooking.service.CinemaHallService;
@@ -37,22 +39,27 @@ public class CinemaController {
         cinemaService.saveCinema(cinema);
     }
 
-    /*@RequestMapping(method = RequestMethod.POST ,value="/{locationid}/cinema")
+
+   /* @RequestMapping(method = RequestMethod.POST ,value="/{locationid}/cinema")
     public void saveNewLocation(@RequestBody Cinema cinema ,@PathVariable Integer locationid){
          Location location = locationService.getSpecificLocation(locationid);
         cinema.setLocation(location);
         cinemaService.saveCinema(cinema);
     }*/
-    @RequestMapping(method = RequestMethod.POST ,value="/{locationid}/cinema/cin")
-    public void saveNewCinenmaAndHalls(@RequestBody CinemaRequest cinemaRequest , @PathVariable Integer locationid){
+   /* @RequestMapping(method = RequestMethod.POST ,value="/{locationid}/cinema")
+    public void saveNewCinenmaAndHalls(@RequestBody CinemaRequest cinemaRequest , @PathVariable Integer locationid) throws JsonProcessingException {
         Location location = locationService.getSpecificLocation(locationid);
       //  cinema.setLocation(location);
-        Cinema cinema = new Cinema( cinemaRequest.getCinema_id(),cinemaRequest.getCinema_name(),locationid,cinemaRequest.getNumber_of_halls());
-
+        System.out.println(cinemaRequest.getCinemaHallList());
+        Cinema cinema = new Cinema( 11,cinemaRequest.getCinema_name(),locationid,5);
+        //List<CinemaHall> cinemaHall = cinemaRequest.getCinemaHalls();
         cinema.setLocation(location);
+       // for(CinemaHall c :cinemaHall){
+        //    cinemaHallService.saveCinemaHall(c);
+        }
         //
-        cinemaService.saveCinema(cinema);
-    }
+        //cinemaService.saveCinema(cinema);
+    }*/
 
 
 

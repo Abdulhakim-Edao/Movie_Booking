@@ -5,22 +5,25 @@ package com.teameth.moviebooking.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 
 public class Role {
     @Id
-    private int roleid;
+    private int roleId;
 
     private String name;
     private String description;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private List<User> users;
 
 
 /* @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "Users_inRoles",
             joinColumns = {
-                    @JoinColumn(name = "roleid")
+                    @JoinColumn(name = "roleId")
             },
             inverseJoinColumns = {
                     @JoinColumn(name = "useridid" ) })
@@ -32,19 +35,16 @@ public class Role {
 
     }
 
-    public Role(int roleid, String name, String description) {
-        this.roleid = roleid;
+    public Role(int roleId, String name, String description) {
+        this.roleId = roleId;
         this.name = name;
         this.description = description;
     }
 
-    public int getroleid() {
-        return roleid;
-    }
 
 
-    public void setroleid(int roleid) {
-        this.roleid = roleid;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     public String getName() {
@@ -52,12 +52,10 @@ public class Role {
     }
 
     public int getRoleId() {
-        return roleid;
+        return roleId;
     }
 
-    public void setRoleId(int roleid) {
-        this.roleid = roleid;
-    }
+
 
     public void setName(String name) {
         this.name = name;
@@ -69,6 +67,12 @@ public class Role {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    @Override
+    public String toString() {
+        return this.getName();
     }
 }
 

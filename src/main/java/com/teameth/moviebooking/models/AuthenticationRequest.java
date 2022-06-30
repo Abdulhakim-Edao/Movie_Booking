@@ -1,8 +1,20 @@
 package com.teameth.moviebooking.models;
 
+import java.util.List;
+
 public class AuthenticationRequest {
     private String username;
     private String password;
+
+    private List<String> authoritites;
+
+    public List<String> getAuthoritites() {
+        return authoritites;
+    }
+
+    public void setAuthoritites(List<String> authoritites) {
+        this.authoritites = authoritites;
+    }
 
     public AuthenticationRequest() {
     }

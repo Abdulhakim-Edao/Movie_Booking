@@ -1,14 +1,17 @@
 
 package com.teameth.moviebooking.controller;
 
-import com.teameth.moviebooking.domain.Location;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.teameth.moviebooking.domain.Role;
 import com.teameth.moviebooking.domain.User;
-import com.teameth.moviebooking.reservation.MyUserDetailService;
+import com.teameth.moviebooking.security.MyUserDetailService;
 import com.teameth.moviebooking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class UserController {
@@ -21,7 +24,7 @@ public class UserController {
 @Autowired
     MyUserDetailService myUserDetailService;
 
-   @Autowired
+   //@Autowired
 
 
 
@@ -36,11 +39,35 @@ public class UserController {
         userService.saveUser(user);
     }
     @RequestMapping("/user/{username}")
-    public User getAllUsers(@PathVariable String username){
-        return userService.getByUsername(username);
+      @PreAuthorize("hasAuthority('ADMIN')")
+     //@RolesAllowed("CUST")
+
+    public String getAllUsers(@PathVariable String username) throws JsonProcessingException {
+        User user=userService.getByUsername(username);
+        Set<Role> rls =user.getRole();
+        return String.valueOf(rls.toString());
     }
+
+
 
 
 
 }
 
+/* ObjectMapper ob= new ObjectMapper();
+        Role role = ob.readValue(result,Role.class);*/
+               /* String[] names = payload.split("[{\":\"-]");
+       // result = result.replaceAll("\",","");
+        String[] payloadChunks = result.split("[\":]");*/
+//String[]
+       /*String json = payload;
+                //"{ \"f1\" : \"v1\" } ";*/
+
+       /* ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode jsonNode = objectMapper.readTree(json);*/
+
+// String tot = nameNode.toString();
+//System.out.println(jsonNode.get("f1").asText());
+//System.out.println(token);
+//var obj = jsonNode.get("a").asText();

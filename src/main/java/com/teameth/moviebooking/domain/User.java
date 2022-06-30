@@ -4,6 +4,7 @@ package com.teameth.moviebooking.domain;
 import javax.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,8 +18,12 @@ public class User {
     private String password;
 
     private String name;
+    @ManyToMany( cascade = CascadeType.ALL ,fetch = FetchType.EAGER)
+    @JoinTable(name = "user_with_role",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "userid")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "roleId")})
+    private Set<Role> roles= new HashSet<>();
 
-    private String role;
 
 
 
@@ -35,7 +40,22 @@ public class User {
 
             */
 
-  // private List<Role> roles= new ArrayList<>();
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    public Set<Role> getRole() {
+        return roles;
+    }
+
+    public void setRole(Set<Role> role) {
+        this.roles = role;
+    }
+// private List<Role> roles= new ArrayList<>();
 
 
     public User() {
@@ -49,13 +69,13 @@ public class User {
         this.name = name;
     }
 
-    public String getrole() {
+    /*public String getrole() {
         return role;
     }
 
     public void setrole(String role) {
         this.role = role;
-    }
+    }*/
 
     public User(String username, String password) {
         this.username = username;

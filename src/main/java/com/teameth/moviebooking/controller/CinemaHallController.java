@@ -23,12 +23,12 @@ public class CinemaHallController {
         return cinemaHallService.getAllCinemaHall();
     }
 
-   /* @RequestMapping(method = RequestMethod.POST ,value="/{cinemaid}/cinemaHall")
+   @RequestMapping(method = RequestMethod.POST ,value="/{cinemaid}/cinemaHall")
     public void saveNewCinemaHall(@RequestBody CinemaHall cinemaHall , @PathVariable Integer cinemaid){
         Cinema cinema = cinemaService.getCinema(cinemaid);
         cinemaHall.setCinema(cinema);
         cinemaHallService.saveCinemaHall(cinemaHall);
-    }*/
+    }
 
 
 }

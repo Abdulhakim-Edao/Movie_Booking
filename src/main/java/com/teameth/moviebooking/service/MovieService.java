@@ -22,6 +22,11 @@ public class MovieService {
         return movieRepository.findById(id).get();
     }
 
+    public Movie getMovieDetail(Integer id) {
+        return movieRepository.findById(id).get();
+    }
+
+
     public Movie getMovieByName(String movieTitle) {
         return movieRepository.findByTitle(movieTitle);
     }
@@ -29,4 +34,5 @@ public class MovieService {
     public void saveMovie(Movie movie) {
         movieRepository.save(movie);
     }
+
 }
