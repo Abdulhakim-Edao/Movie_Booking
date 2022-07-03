@@ -51,12 +51,13 @@ public class Movie {
         return description;
     }
 
-    public Movie(int movieid, String title, int published_year, String description, String genre) {
+    public Movie(int movieid, String title, int published_year, String description, String genre,String imagePath) {
         this.movieid = movieid;
         this.title = title;
         this.published_year = published_year;
         this.description = description;
         this.genre = genre;
+        this.imagePath=imagePath;
     }
 
     public void setDescription(String description) {
@@ -71,4 +72,11 @@ public class Movie {
         this.genre = genre;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }

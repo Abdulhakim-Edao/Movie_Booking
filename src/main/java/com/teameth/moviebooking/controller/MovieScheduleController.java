@@ -69,6 +69,7 @@ public class MovieScheduleController {
 
    }
     @RequestMapping("/movies/{movieId}")
+    @CrossOrigin
     public List<MovieSchedule> getScheduleByMovieId(@PathVariable Integer movieId){
         //movieScheduleService.getScheduleByMovieId(movieId);
         List<MovieSchedule> movieScheduleList = movieScheduleService.getAllMovieSchedule();
@@ -85,7 +86,8 @@ public class MovieScheduleController {
         return tobeReturned;
     }
     @RequestMapping("/scheduleSeats/{scheduleId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@CrossOrigin(value = "localhost:3000/scheduleSeats/38", allowCredentials = "true")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public List<Integer> getHallSeats(@PathVariable Integer scheduleId){
        List<Integer> listOfSeats = new ArrayList<>();
       MovieSchedule movieSchedule = movieScheduleService.getMovieSchedule(scheduleId);
@@ -98,12 +100,11 @@ public class MovieScheduleController {
     }
 
     @RequestMapping("/scheduleSeats/{scheduleId}/getShowseats")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public List<Integer> getShowSeats(@PathVariable Integer scheduleId){
         List<Integer> listOfSeats = new ArrayList<>();
        // MovieSchedule movieSchedule = movieScheduleService.getMovieSchedule(scheduleId);
         List<ShowSeat> showseats = showSeatService.getListOFShowSeatsByScheduleID(scheduleId);
-
         for(ShowSeat ss:showseats){
             listOfSeats.add(ss.getHallSeat().getSeatId());
         }

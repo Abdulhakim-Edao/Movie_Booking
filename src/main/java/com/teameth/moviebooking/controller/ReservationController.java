@@ -36,6 +36,8 @@ public class ReservationController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    EmailNotificationService emailNotificationService;
 
     @RequestMapping("/reservation")
     public List<Reservation> getAllReservations(){
@@ -43,13 +45,14 @@ public class ReservationController {
     }
     @RequestMapping("/ListPersonalReservations")
     @PreAuthorize("hasAuthority('CUST')")
-
+    @CrossOrigin
     public List<Reservation> getListOfReservationsPerUser(@RequestHeader("Authorization") String authHeader){
         String uName = jwtTokenUtil.extraUsername(authHeader.split(" ")[1]);
         User user = userService.getByUsername(uName);
         return reservationService.findReservationByUserID(user.getId());
     }
     @RequestMapping(value = "/deleteReservation/{reservationID}")
+    @PreAuthorize("hasAuthority('CUST')")
     public void deleteReservation(@PathVariable Integer reservationID) {
         reservationService.deleteUserReservation(reservationID);
     }
@@ -81,5 +84,6 @@ public class ReservationController {
             seat.setReservation(savedReservation);
             showSeatService.saveShowSeat(seat);
         }
+        emailNotificationService.sendEmail(user.getEmail(), user.getName(), reservationRequest.getReservation_id());
     }
 }

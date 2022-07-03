@@ -25,6 +25,10 @@ public class MovieController {
     //@RequestMapping("/movie")
     @GetMapping
     public List<Movie> getAllLocations(){
+
+        /*List<Movie> path = movieService.getAllMovies();
+        path.get(1).getImagePath();*/
+
         return movieService.getAllMovies();
     }
 

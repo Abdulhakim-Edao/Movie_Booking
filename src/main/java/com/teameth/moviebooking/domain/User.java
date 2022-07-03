@@ -18,6 +18,8 @@ public class User {
     private String password;
 
     private String name;
+
+    private String email;
     @ManyToMany( cascade = CascadeType.ALL ,fetch = FetchType.EAGER)
     @JoinTable(name = "user_with_role",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "userid")},
@@ -39,6 +41,22 @@ public class User {
     @JoinColumn(name = "student_section", nullable = false)
 
             */
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     public int getUserid() {
         return userid;

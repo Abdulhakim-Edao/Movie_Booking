@@ -29,6 +29,7 @@ public class LocationController {
     private MovieScheduleService movieScheduleService;
 
     @RequestMapping("/location")
+    @CrossOrigin
     public List<Location> getAllLocations(){
         return locationService.getAllLocation();
     }
@@ -41,6 +42,7 @@ public class LocationController {
 
 
     @RequestMapping(method = RequestMethod.GET ,value="/location/{id}")
+    @CrossOrigin
     public List<Movie> getMoviesLocation(@PathVariable Integer id){
         List<Movie> movies = new ArrayList<>();
         List<Cinema> cinemas = cinemaService.getByLocation(id);
